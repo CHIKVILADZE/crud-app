@@ -4,8 +4,13 @@ const mysqlConnection = require('../connect');
 const router = express.Router();
 
 // Update  contact
-router.put('/contacts/:id', async (req, res) => {
+router.put('/contacts/:id', validateContact, async (req, res) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const name = req.body.name;
     const email = req.body.email;
     const phone = req.body.phone;
