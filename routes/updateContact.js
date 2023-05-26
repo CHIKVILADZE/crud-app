@@ -1,5 +1,7 @@
 const express = require('express');
 const mysqlConnection = require('../connect');
+const { validationResult } = require('express-validator');
+const validateContact = require('../contactValidate');
 
 const router = express.Router();
 
@@ -11,13 +13,27 @@ router.put('/contacts/:id', validateContact, async (req, res) => {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const name = req.body.name;
-    const email = req.body.email;
-    const phone = req.body.phone;
+    const id = req.params.id;
+    const updateFields = {};
+
+    if (req.body.name) {
+      updateFields.name = req.body.name;
+    }
+    if (req.body.email) {
+      updateFields.email = req.body.email;
+    }
+    if (req.body.phone) {
+      updateFields.phone = req.body.phone;
+    }
+
+    const values = Object.values(updateFields);
+    const fieldsToUpdate = Object.keys(updateFields)
+      .map((field) => `${field} = ?`)
+      .join(', ');
 
     mysqlConnection.query(
-      'UPDATE records SET name = ?, email = ?, phone = ? ',
-      [name, email, phone],
+      `UPDATE records SET ${fieldsToUpdate} WHERE id = ?`,
+      [...values, id],
       (err, result) => {
         if (err) {
           console.log(err);
