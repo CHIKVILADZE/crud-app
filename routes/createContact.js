@@ -1,11 +1,11 @@
 const express = require('express');
-const validateContact = require('../contactValidate.js');
+const createContactValidate = require('../validations/contactCreateValidation.js');
 const mysqlConnection = require('../connect');
 const { validationResult } = require('express-validator');
 const router = express.Router();
 
 // Create contact
-router.post('/contacts', validateContact, async (req, res) => {
+router.post('/contacts', createContactValidate, async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

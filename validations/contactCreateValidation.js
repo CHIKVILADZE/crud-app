@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator');
 
-const validateContact = [
+const createContactValidate = [
   body('name')
     .trim()
     .notEmpty()
@@ -23,4 +23,4 @@ const validateContact = [
     .withMessage('Phone number should be at least 6 characters'),
 ];
 
-module.exports = validateContact;
+module.exports = createContactValidate;
