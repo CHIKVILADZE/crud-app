@@ -10,4 +10,9 @@ app.use(bodyparser.json());
 
 app.use(express.json());
 
+app.use('/', contactsRouter);
+app.use('/:id', deleteRouter);
+app.use('/', updateRouter);
+app.use('/', createRouter);
+
 app.listen(3000, () => console.log('Server is running on port 3000'));
